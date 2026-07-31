@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body {
+        margin: 0;
+        background: black;
+        overflow: hidden;
+    }
+
+    canvas {
+        display: block;
+    }
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas"></canvas>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+const text = "I LOVE U";
+
+let progress = 0;
+
+function resize() {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+}
+
+window.addEventListener("resize", resize);
+
+function draw() {
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font = "bold 9px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.fillStyle = "#ff8fc7";
+    ctx.shadowColor = "#ff1493";
+    ctx.shadowBlur = 12;
+
+    const scale = Math.min(canvas.width, canvas.height) / 38;
+
+    // Create many points around the heart
+    for (let i = 0; i < progress; i++) {
+
+        const t = i * Math.PI * 2 / 500;
+
+        const x =
+            16 * Math.pow(Math.sin(t), 3);
+
+        const y =
+            13 * Math.cos(t)
+            - 5 * Math.cos(2 * t)
+            - 2 * Math.cos(3 * t)
+            - Math.cos(4 * t);
+
+        const px = canvas.width / 2 + x * scale;
+        const py = canvas.height / 2 - y * scale;
+
+        ctx.fillText(text, px, py);
+    }
+
+    ctx.shadowBlur = 0;
+
+    // Slow animation
+    progress += 0.5;
+
+    if (progress >= 500) {
+        setTimeout(() => {
+            progress = 0;
+        }, 2000);
+    }
+
+    requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+
+</body>
+</html>
